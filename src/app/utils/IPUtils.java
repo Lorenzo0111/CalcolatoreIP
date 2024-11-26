@@ -1,8 +1,7 @@
 package app.utils;
 
+import app.errori.CalculatorException;
 import app.ip.Classe;
-
-import javax.swing.*;
 
 public final class IPUtils {
 
@@ -13,10 +12,8 @@ public final class IPUtils {
 
             for (int i = 0; i < ottetti.length; i++) {
                 ottettiInt[i] = Integer.parseInt(ottetti[i]);
-                if (ottettiInt[i] < 0 || ottettiInt[i] > 255) {
-                    JOptionPane.showMessageDialog(null, "Inserisci un indirizzo IP valido", "Errore", JOptionPane.ERROR_MESSAGE);
-                    return null;
-                }
+                if (ottettiInt[i] < 0 || ottettiInt[i] > 255)
+                    throw new CalculatorException("Inserisci un indirizzo IP valido");
             }
 
             return ottettiInt;
@@ -43,5 +40,17 @@ public final class IPUtils {
         } else if (ottetti[0] == 172 && ottetti[1] >= 16 && ottetti[1] <= 31) {
             return true;
         } else return ottetti[0] == 192 && ottetti[1] == 168;
+    }
+
+    public static String padEnd(String s, int n) {
+        return String.format("%-" + n + "s", s);
+    }
+
+    public static String padStart(String s, int n) {
+        return String.format("%" + n + "s", s);
+    }
+
+    public static double log2(int N) {
+        return Math.log(N) / Math.log(2);
     }
 }

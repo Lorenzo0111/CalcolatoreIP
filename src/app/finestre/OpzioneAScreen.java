@@ -1,8 +1,10 @@
 package app.finestre;
 
 import app.Applicazione;
+import app.errori.CalculatorException;
 import app.ip.Classe;
 import app.layout.Pannello;
+import app.layout.PlaceholderInput;
 import app.layout.Pulsante;
 import app.layout.Testo;
 import app.utils.IPUtils;
@@ -26,9 +28,11 @@ public class OpzioneAScreen extends Pannello {
         contenutoPagina.layout(new BoxLayout(contenutoPagina, BoxLayout.Y_AXIS));
 
         Pannello inserisciIp = new Pannello();
+        inserisciIp.setMaximumSize(new Dimension(400, 500));
+        inserisciIp.layout(new GridLayout(5, 0, 4, 4));
         inserisciIp.add(new Testo("Inserisci l'indirizzo IP del server:"));
 
-        JTextField ip = new JTextField();
+        JTextField ip = new PlaceholderInput();
         ip.setPreferredSize(new Dimension(200, 30));
         inserisciIp.add(ip);
 
@@ -46,18 +50,14 @@ public class OpzioneAScreen extends Pannello {
 
     public void esegui(String ip) {
         int[] ottetti = IPUtils.calcolaOttetti(ip);
-        if (ottetti == null) {
-            JOptionPane.showMessageDialog(null, "Inserisci un indirizzo IP valido", "Errore", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+        if (ottetti == null)
+            throw new CalculatorException("Inserisci un indirizzo IP valido");
 
         Classe classe = IPUtils.calcolaClasse(ottetti);
         boolean privateIp = IPUtils.privato(ottetti);
 
-        if (classe == null) {
-            JOptionPane.showMessageDialog(null, "Classe non riconosciuta", "Errore", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+        if (classe == null)
+            throw new CalculatorException("Classe non valida");
 
         String visibilita = privateIp ? "privato" : "pubblico";
 

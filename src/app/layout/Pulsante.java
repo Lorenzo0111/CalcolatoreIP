@@ -14,7 +14,7 @@ public class Pulsante extends JButton {
         this.setContentAreaFilled(false);
         this.setOpaque(true);
         this.setForeground(Color.WHITE);
-        this.setBackground(Color.CYAN);
+        this.setBackground(Color.DARK_GRAY);
 
         this.setSize(10, 20);
     }

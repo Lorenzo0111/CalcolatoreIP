@@ -3,6 +3,7 @@ package app;
 import app.finestre.MainScreen;
 import app.finestre.OpzioneAScreen;
 import app.finestre.OpzioneBScreen;
+import app.finestre.OpzioneCScreen;
 
 import javax.swing.*;
 
@@ -18,6 +19,9 @@ public class Applicazione {
         frame.setSize(800, 400);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+
+        Thread.setDefaultUncaughtExceptionHandler((t, e) ->
+                JOptionPane.showMessageDialog(null, e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE));
     }
 
     public void mainScreen() {
@@ -35,6 +39,12 @@ public class Applicazione {
     public void opzioneB() {
         frame.getContentPane().removeAll();
         frame.getContentPane().add(new OpzioneBScreen());
+        frame.revalidate();
+    }
+
+    public void opzioneC() {
+        frame.getContentPane().removeAll();
+        frame.getContentPane().add(new OpzioneCScreen());
         frame.revalidate();
     }
 
