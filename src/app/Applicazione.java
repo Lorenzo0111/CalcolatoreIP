@@ -1,5 +1,6 @@
 package app;
 
+import app.errori.CalculatorException;
 import app.finestre.MainScreen;
 import app.finestre.OpzioneAScreen;
 import app.finestre.OpzioneBScreen;
@@ -20,8 +21,12 @@ public class Applicazione {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
-        Thread.setDefaultUncaughtExceptionHandler((t, e) ->
-                JOptionPane.showMessageDialog(null, e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE));
+        Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
+            if (!(e instanceof CalculatorException))
+                e.printStackTrace();
+
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Errore", JOptionPane.ERROR_MESSAGE);
+        });
     }
 
     public void mainScreen() {

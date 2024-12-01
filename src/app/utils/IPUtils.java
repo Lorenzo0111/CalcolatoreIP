@@ -3,6 +3,8 @@ package app.utils;
 import app.errori.CalculatorException;
 import app.ip.Classe;
 
+import java.util.function.Consumer;
+
 public final class IPUtils {
 
     public static int[] calcolaOttetti(String ip) {
@@ -20,6 +22,15 @@ public final class IPUtils {
         }
 
         return null;
+    }
+
+    public static String[] dividiOttetti(String ipBin) {
+        return ipBin.split("(?<=\\G.{8})");
+    }
+
+    public static String calculateSubnetMask(Classe classe, int bits) {
+        int totalBits = classe.getBitRete() + bits;
+        return padEnd("1".repeat(totalBits), '0', 32);
     }
 
     public static Classe calcolaClasse(int[] ottetti) {
@@ -42,15 +53,36 @@ public final class IPUtils {
         } else return ottetti[0] == 192 && ottetti[1] == 168;
     }
 
-    public static String padEnd(String s, int n) {
-        return String.format("%-" + n + "s", s);
+    public static String padEnd(String string, char character, int length) {
+        StringBuilder builder = new StringBuilder(string);
+        while (builder.length() < length) {
+            builder.append(character);
+        }
+
+        return builder.toString();
     }
 
-    public static String padStart(String s, int n) {
-        return String.format("%" + n + "s", s);
+    public static String padStart(String string, char character, int length) {
+        StringBuilder builder = new StringBuilder(string);
+        while (builder.length() < length) {
+            builder.insert(0, character);
+        }
+
+        return builder.toString();
+    }
+
+    public static String manipulate(String string, Consumer<StringBuilder> consumer) {
+        StringBuilder builder = new StringBuilder(string);
+        consumer.accept(builder);
+        return builder.toString();
     }
 
     public static double log2(int N) {
         return Math.log(N) / Math.log(2);
     }
+
+    public static String toString(int[] ottetti) {
+        return ottetti[0] + "." + ottetti[1] + "." + ottetti[2] + "." + ottetti[3];
+    }
+
 }

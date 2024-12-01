@@ -1,17 +1,25 @@
 package app.ip;
 
 public enum Classe {
-    A(24),
-    B(16),
-    C(8);
+    A(1),
+    B(2),
+    C(3);
 
-    private final int bitHost;
+    private final int ottettiRete;
 
-    Classe(int bitHost) {
-        this.bitHost = bitHost;
+    Classe(int ottettiRete) {
+        this.ottettiRete = ottettiRete;
+    }
+
+    public int getOttettiRete() {
+        return ottettiRete;
+    }
+
+    public int getBitRete() {
+        return ottettiRete * 8;
     }
 
     public int getBitHost() {
-        return bitHost;
+        return (4 - ottettiRete) * 8;
     }
 }

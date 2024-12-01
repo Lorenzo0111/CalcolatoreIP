@@ -2,6 +2,7 @@ package app.layout;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.util.function.Consumer;
 
 public class Pulsante extends JButton {
@@ -19,8 +20,20 @@ public class Pulsante extends JButton {
         this.setSize(10, 20);
     }
 
-    public Pulsante onClick(Consumer<Void> action) {
-        this.addActionListener(e -> action.accept(null));
+    public Pulsante onClick(Consumer<ActionEvent> action) {
+        this.addActionListener(action::accept);
+        return this;
+    }
+
+    public Pulsante setDisabled() {
+        this.setEnabled(false);
+        this.setBackground(Color.GRAY);
+        return this;
+    }
+
+    public Pulsante setEnabled() {
+        this.setEnabled(true);
+        this.setBackground(Color.DARK_GRAY);
         return this;
     }
 }
