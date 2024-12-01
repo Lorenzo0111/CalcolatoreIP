@@ -3,54 +3,20 @@ package app.finestre;
 import app.errori.CalculatorException;
 import app.ip.Classe;
 import app.ip.Sottorete;
-import app.layout.Pannello;
-import app.layout.PlaceholderInput;
 import app.utils.IPUtils;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class OpzioneCScreen extends BaseCalculatorScreen {
-    private PlaceholderInput ipInput;
-    private PlaceholderInput retiInput;
 
     public OpzioneCScreen() {
         super("Calcola sottoreti");
     }
 
     @Override
-    public Pannello inputPanel() {
-        Pannello inserisciIp = new Pannello();
-        inserisciIp.setMaximumSize(new Dimension(400, 100));
-        inserisciIp.layout(new GridLayout(3, 0, 4, 4));
-
-        ipInput = new PlaceholderInput();
-        ipInput.setPlaceholder("Indirizzo IP");
-        ipInput.setSize(new Dimension(200, 30));
-        inserisciIp.add(ipInput);
-
-        retiInput = new PlaceholderInput();
-
-        retiInput.setPlaceholder("Numero reti");
-        retiInput.setSize(new Dimension(200, 30));
-        inserisciIp.add(retiInput);
-
-        return inserisciIp;
-    }
-
-    @Override
-    public void handleSubmit() {
-        String ip = ipInput.getText();
-        int numSottoreti;
-
-        try {
-            numSottoreti = Integer.parseInt(retiInput.getText());
-        } catch (NumberFormatException e) {
-            throw new CalculatorException("Il numero di reti inserite non è valido");
-        }
-
+    public void handleSubmit(String ip, int numSottoreti) {
         int[] ottetti = IPUtils.calcolaOttetti(ip);
 
         if (ottetti == null)

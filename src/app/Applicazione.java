@@ -1,10 +1,7 @@
 package app;
 
 import app.errori.CalculatorException;
-import app.finestre.MainScreen;
-import app.finestre.OpzioneAScreen;
-import app.finestre.OpzioneBScreen;
-import app.finestre.OpzioneCScreen;
+import app.finestre.*;
 
 import javax.swing.*;
 
@@ -50,6 +47,12 @@ public class Applicazione {
     public void opzioneC() {
         frame.getContentPane().removeAll();
         frame.getContentPane().add(new OpzioneCScreen());
+        frame.revalidate();
+    }
+
+    public void opzioneD() {
+        frame.getContentPane().removeAll();
+        frame.getContentPane().add(new OpzioneDScreen());
         frame.revalidate();
     }
 

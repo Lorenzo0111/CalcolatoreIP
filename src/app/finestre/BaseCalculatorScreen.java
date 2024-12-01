@@ -4,6 +4,7 @@ import app.Applicazione;
 import app.errori.CalculatorException;
 import app.ip.Sottorete;
 import app.layout.Pannello;
+import app.layout.PlaceholderInput;
 import app.layout.Pulsante;
 import app.layout.Testo;
 
@@ -34,13 +35,37 @@ public abstract class BaseCalculatorScreen extends Pannello {
         Pannello contenutoPagina = new Pannello();
         contenutoPagina.setLayout(new BoxLayout(contenutoPagina, BoxLayout.Y_AXIS));
 
-        Pannello inserisciIp = inputPanel();
+        Pannello inserisciIp = new Pannello();
+        inserisciIp.setMaximumSize(new Dimension(400, 100));
+        inserisciIp.layout(new GridLayout(3, 0, 4, 4));
+
+        PlaceholderInput ipInput = new PlaceholderInput();
+        ipInput.setPlaceholder("Indirizzo IP");
+        ipInput.setSize(new Dimension(200, 30));
+        inserisciIp.add(ipInput);
+
+        PlaceholderInput retiInput = new PlaceholderInput();
+
+        retiInput.setPlaceholder("Numero reti");
+        retiInput.setSize(new Dimension(200, 30));
+        inserisciIp.add(retiInput);
 
         Pannello azioni = new Pannello();
         azioni.layout(new GridLayout(1, 0, 4, 4));
 
         azioni.add(new Pulsante("Conferma")
-                .onClick(a -> handleSubmit()), BorderLayout.PAGE_END);
+                .onClick(a -> {
+                    String ip = ipInput.getText();
+                    int numSottoreti;
+
+                    try {
+                        numSottoreti = Integer.parseInt(retiInput.getText());
+                    } catch (NumberFormatException e) {
+                        throw new CalculatorException("Il numero di reti inserite non è valido");
+                    }
+
+                    handleSubmit(ip, numSottoreti);
+                }), BorderLayout.PAGE_END);
 
         azioni.add(salva = new Pulsante("Salva")
                 .setDisabled()
@@ -132,9 +157,7 @@ public abstract class BaseCalculatorScreen extends Pannello {
         this.add(contenutoPagina, BorderLayout.CENTER);
     }
 
-    public abstract Pannello inputPanel();
-
-    public abstract void handleSubmit();
+    public abstract void handleSubmit(String ip, int numSottoreti);
 
     public void mostraBinario() {
         if (risultato == null) return;

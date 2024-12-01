@@ -91,4 +91,21 @@ public final class IPUtils {
                 padStart(Integer.toBinaryString(ottetti[2]), '0', 8) + "." +
                 padStart(Integer.toBinaryString(ottetti[3]), '0', 8);
     }
+
+    public static void descendingSort(int[] array) {
+        for (int i = 0; i < array.length; i++) {
+            for (int j = i + 1; j < array.length; j++) {
+                if (array[i] < array[j]) {
+                    int temp = array[i];
+                    array[i] = array[j];
+                    array[j] = temp;
+                }
+            }
+        }
+    }
+
+    public static String incrementBinary(String binary) {
+        int decimal = Integer.parseInt(binary, 2);
+        return padStart(Integer.toBinaryString(decimal + 1), '0', binary.length());
+    }
 }

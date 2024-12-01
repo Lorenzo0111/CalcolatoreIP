@@ -25,7 +25,8 @@ public class MainScreen extends Pannello {
                 .onClick(a -> Applicazione.getInstance().opzioneB()));
         buttons.add(new Pulsante("Calcola sottoreti (S.M fissa)")
                 .onClick(a -> Applicazione.getInstance().opzioneC()));
-        buttons.add(new Pulsante("Calcola sottoreti (S.M variabile)"));
+        buttons.add(new Pulsante("Calcola sottoreti (S.M variabile)")
+                .onClick(a -> Applicazione.getInstance().opzioneD()));
 
         this.add(buttons, BorderLayout.CENTER);
     }
