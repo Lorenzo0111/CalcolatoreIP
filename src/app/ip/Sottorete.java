@@ -55,4 +55,20 @@ public record Sottorete(
                 broadcast[0], broadcast[1], broadcast[2], broadcast[3]
         );
     }
+
+    public String toBinary() {
+        return """
+                NetId: %s
+                First Host: %s
+                Last Host: %s
+                Gateway: %s
+                Broadcast: %s
+                """.formatted(
+                IPUtils.toBinary(netId),
+                IPUtils.toBinary(firstHost),
+                IPUtils.toBinary(lastHost),
+                IPUtils.toBinary(gateway),
+                IPUtils.toBinary(broadcast)
+        );
+    }
 }

@@ -85,4 +85,10 @@ public final class IPUtils {
         return ottetti[0] + "." + ottetti[1] + "." + ottetti[2] + "." + ottetti[3];
     }
 
+    public static String toBinary(int[] ottetti) {
+        return padStart(Integer.toBinaryString(ottetti[0]), '0', 8) + "." +
+                padStart(Integer.toBinaryString(ottetti[1]), '0', 8) + "." +
+                padStart(Integer.toBinaryString(ottetti[2]), '0', 8) + "." +
+                padStart(Integer.toBinaryString(ottetti[3]), '0', 8);
+    }
 }

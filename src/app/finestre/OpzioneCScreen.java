@@ -23,7 +23,9 @@ import java.util.List;
 public class OpzioneCScreen extends Pannello {
     private final JTextArea contenuto = new JTextArea();
     private final Pulsante salva;
-    private final Pulsante pulisci;
+    private Pulsante pulisci;
+    private Pulsante convertiBinario;
+    private List<Sottorete> risultato = null;
 
     public OpzioneCScreen() {
         this.setBackground(Color.BLACK);
@@ -98,9 +100,15 @@ public class OpzioneCScreen extends Pannello {
                 .onClick(e -> {
                     contenuto.setText("");
                     salva.setDisabled();
+                    convertiBinario.setDisabled();
+                    pulisci.setDisabled();
+                }), BorderLayout.PAGE_END);
 
-                    if (e.getSource() instanceof Pulsante pulsante)
-                        pulsante.setDisabled();
+        azioni.add(convertiBinario = new Pulsante("Binario")
+                .setDisabled()
+                .onClick(e -> {
+                    mostraBinario();
+                    convertiBinario.setDisabled();
                 }), BorderLayout.PAGE_END);
 
         inserisciIp.add(azioni);
@@ -177,6 +185,8 @@ public class OpzioneCScreen extends Pannello {
             sottoreti.add(sottorete);
         }
 
+        risultato = sottoreti;
+
         StringBuilder builder = new StringBuilder();
         String subnetMask = IPUtils.calculateSubnetMask(classe, bitSottoreti);
         int[] subnetMaskOttetti = Arrays.stream(IPUtils.dividiOttetti(subnetMask))
@@ -194,6 +204,24 @@ public class OpzioneCScreen extends Pannello {
             Sottorete sottorete = sottoreti.get(i);
             builder.append("----------- Sottorete #").append(i + 1).append(" -----------\n")
                     .append(sottorete)
+                    .append("\n\n");
+        }
+
+        contenuto.setText(builder.toString());
+        contenuto.setCaretPosition(0);
+        salva.setEnabled();
+        pulisci.setEnabled();
+        convertiBinario.setEnabled();
+    }
+
+    public void mostraBinario() {
+        if (risultato == null) return;
+
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < risultato.size(); i++) {
+            Sottorete sottorete = risultato.get(i);
+            builder.append("----------- Sottorete #").append(i + 1).append(" -----------\n")
+                    .append(sottorete.toBinary())
                     .append("\n\n");
         }
 
