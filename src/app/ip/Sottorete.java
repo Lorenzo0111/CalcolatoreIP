@@ -43,8 +43,8 @@ public record Sottorete(
     public String toString() {
         return """
                 NetId: %d.%d.%d.%d
-                First Host: %d.%d.%d.%d
-                Last Host: %d.%d.%d.%d
+                Primo Host: %d.%d.%d.%d
+                Ultimo Host: %d.%d.%d.%d
                 Gateway: %d.%d.%d.%d
                 Broadcast: %d.%d.%d.%d
                 """.formatted(
@@ -59,8 +59,8 @@ public record Sottorete(
     public String toBinary() {
         return """
                 NetId: %s
-                First Host: %s
-                Last Host: %s
+                Primo Host: %s
+                Ultimo Host: %s
                 Gateway: %s
                 Broadcast: %s
                 """.formatted(

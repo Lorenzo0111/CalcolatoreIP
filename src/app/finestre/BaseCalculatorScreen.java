@@ -17,10 +17,10 @@ import java.io.IOException;
 import java.util.List;
 
 public abstract class BaseCalculatorScreen extends Pannello {
-    protected final JTextArea contenuto = new JTextArea();
     protected final Pulsante salva;
     protected Pulsante pulisci;
     protected Pulsante convertiBinario;
+    protected JTable table;
     private List<Sottorete> risultato = null;
 
     public BaseCalculatorScreen(String title) {
@@ -82,7 +82,10 @@ public abstract class BaseCalculatorScreen extends Pannello {
                     }
 
                     try (FileWriter writer = new FileWriter(file)) {
-                        writer.write(contenuto.getText());
+                        for (Sottorete sottorete : risultato) {
+                            writer.write(sottorete.toString());
+                            writer.write("\n");
+                        }
 
                         if (Desktop.isDesktopSupported()) {
                             Desktop.getDesktop().edit(file);
@@ -95,7 +98,7 @@ public abstract class BaseCalculatorScreen extends Pannello {
         azioni.add(pulisci = new Pulsante("Pulisci")
                 .setDisabled()
                 .onClick(e -> {
-                    contenuto.setText("");
+                    risultato = null;
                     salva.setDisabled();
                     convertiBinario.setDisabled();
                     pulisci.setDisabled();
@@ -109,18 +112,11 @@ public abstract class BaseCalculatorScreen extends Pannello {
                 }), BorderLayout.PAGE_END);
 
         inserisciIp.add(azioni);
-
-        contenuto.setMaximumSize(new Dimension(800, 40));
-        contenuto.setEditable(false);
-        contenuto.setBackground(Color.BLACK);
-        contenuto.setForeground(Color.WHITE);
-        contenuto.setFont(new Font("Arial", Font.PLAIN, 14));
-        contenuto.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
-
         contenutoPagina.add(inserisciIp);
-        contenutoPagina.add(contenuto);
 
-        JScrollPane scroll = new JScrollPane(contenuto);
+        table = new JTable(new String[][]{}, new String[]{ "N. Hosts", "Net ID", "Primo Host", "Ultimo Host", "Gateway", "Broadcast", "SM" });
+
+        JScrollPane scroll = new JScrollPane(table);
         scroll.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
 
             @Override
@@ -162,22 +158,14 @@ public abstract class BaseCalculatorScreen extends Pannello {
     public void mostraBinario() {
         if (risultato == null) return;
 
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < risultato.size(); i++) {
-            Sottorete sottorete = risultato.get(i);
-            builder.append("----------- Sottorete #").append(i + 1).append(" -----------\n")
-                    .append(sottorete.toBinary())
-                    .append("\n\n");
-        }
-
-        contenuto.setText(builder.toString());
-        contenuto.setCaretPosition(0);
+        // TODO: AGGIORNA TABLE
         salva.setEnabled();
         pulisci.setEnabled();
     }
 
     protected void impostaRisultato(List<Sottorete> risultato) {
         this.risultato = risultato;
+        // TODO: AGGIORNA TABLE
     }
 
 }

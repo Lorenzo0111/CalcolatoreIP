@@ -7,7 +7,6 @@ import app.utils.IPUtils;
 
 import javax.swing.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class OpzioneDScreen extends BaseCalculatorScreen {
@@ -69,25 +68,6 @@ public class OpzioneDScreen extends BaseCalculatorScreen {
 
         impostaRisultato(sottoreti);
 
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < sottoreti.size(); i++) {
-            Sottorete sottorete = sottoreti.get(i);
-            String subnetMask = IPUtils.calculateSubnetMask(classe, bitsSottoreti[i]);
-            int[] subnetMaskOttetti = Arrays.stream(IPUtils.dividiOttetti(subnetMask))
-                    .mapToInt(s -> Integer.parseInt(s, 2))
-                    .toArray();
-            int cidr = classe.getBitRete() + bitsSottoreti[i];
-
-            builder.append("----------- Sottorete #").append(i + 1).append(" -----------\n")
-                    .append("Host per sottorete: ").append(hostPerSottorete[i]).append("\n")
-                    .append(sottorete)
-                    .append("Maschera di sottorete: ").append(IPUtils.toString(subnetMaskOttetti))
-                    .append(" (/").append(cidr).append(")\n")
-                    .append("\n\n");
-        }
-
-        contenuto.setText(builder.toString());
-        contenuto.setCaretPosition(0);
         salva.setEnabled();
         pulisci.setEnabled();
         convertiBinario.setEnabled();
