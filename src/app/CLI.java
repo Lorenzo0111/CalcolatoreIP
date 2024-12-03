@@ -102,13 +102,14 @@ public class CLI {
 
                         int[] hostPerSottorete = new int[numSottoretiD];
                         for (int i = 0; i < numSottoretiD; i++) {
-                            System.out.println("Inserisci il numero di host per la sottorete " + (i + 1));
+                            System.out.print("Inserisci il numero di host per la sottorete " + (i + 1));
                             hostPerSottorete[i] = scanner.nextInt();
                         }
 
                         List<Sottorete> sottoretiD = OpzioneDScreen.esegui(ipD, numSottoretiD, hostPerSottorete);
-                        System.out.println(Colore.CYAN + "Sottoreti:");
+                        System.out.println(Colore.CYAN + "\nSottoreti:");
                         for (Sottorete sottorete : sottoretiD) {
+                            System.out.println(Colore.BLUE + "Numero di host: " + sottorete.hosts());
                             System.out.println(Colore.BLUE + sottorete.toString());
                             System.out.println(Colore.RESET + "\n--------------------\n");
                         }
@@ -119,17 +120,15 @@ public class CLI {
                         System.out.println(Colore.RED + "Opzione non valida");
                         break;
                 }
-
-                System.out.println(Colore.GREEN + "Premi INVIO per continuare...");
-                scanner.nextLine();
-                scanner.nextLine();
-
-                System.out.println("\n\n");
             } catch (Exception e) {
-                System.out.println(Colore.RED + "Errore: " + e.getMessage());
-                System.out.println(Colore.GREEN + "Premi INVIO per continuare...");
-                scanner.nextLine();
+                System.out.println(Colore.RED + "Errore: " + (e.getMessage() == null ? "Input inserito non valido" : e.getMessage()));
             }
+
+            System.out.println(Colore.GREEN + "Premi INVIO per continuare...");
+            scanner.nextLine();
+            scanner.nextLine();
+
+            System.out.println("\n\n");
         } while (opzione != 5);
     }
 }
