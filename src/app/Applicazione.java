@@ -5,6 +5,9 @@ import app.finestre.*;
 
 import javax.swing.*;
 
+/**
+ * Classe principale dell'applicazione
+ */
 public class Applicazione {
     private static Applicazione instance;
     private final JFrame frame;
@@ -18,6 +21,7 @@ public class Applicazione {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
+        // Gestione degli errori con finestra di dialogo
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
             if (!(e instanceof CalculatorException))
                 e.printStackTrace();
@@ -26,6 +30,7 @@ public class Applicazione {
         });
     }
 
+    // -----------------------------------[ Schermate ]-----------------------------------
     public void mainScreen() {
         frame.getContentPane().removeAll();
         frame.getContentPane().add(new MainScreen());
@@ -56,6 +61,7 @@ public class Applicazione {
         frame.revalidate();
     }
 
+    // -----------------------------------[ Main ]-----------------------------------
     public static void main(String[] args) {
         SwingUtilities.invokeLater(Applicazione::create);
     }

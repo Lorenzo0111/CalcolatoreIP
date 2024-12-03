@@ -11,18 +11,23 @@ import app.utils.IPUtils;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Schermata per l'opzione B
+ */
 public class OpzioneBScreen extends Pannello {
     private final Pannello contenuto = new Pannello();
 
     public OpzioneBScreen() {
         this.setBackground(Color.BLACK);
 
+        // Titolo e pulsante per tornare indietro
         JPanel titolo = new Pannello();
         titolo.add(new Pulsante("Indietro")
                 .onClick(a -> Applicazione.getInstance().mainScreen()));
         titolo.add(new Testo("Controlla stessa S.M.", SwingConstants.CENTER)
                 .setArial(Font.BOLD, 24));
 
+        // Contenuto
         Pannello contenutoPagina = new Pannello();
         contenutoPagina.layout(new BoxLayout(contenutoPagina, BoxLayout.Y_AXIS));
 
@@ -63,6 +68,7 @@ public class OpzioneBScreen extends Pannello {
     }
 
     public void esegui(String ip1, String ip2, String sm1, String sm2) {
+        // Controllo se gli indirizzi IP e le subnet mask sono validi
         int[] ottetti1 = IPUtils.calcolaOttetti(ip1);
         int[] ottetti2 = IPUtils.calcolaOttetti(ip2);
         int[] ottettiSM1 = IPUtils.calcolaOttetti(sm1);
@@ -83,18 +89,20 @@ public class OpzioneBScreen extends Pannello {
         if (ottettiSM2 == null)
             throw new CalculatorException("La seconda subnet mask non è valida");
 
+        // Controllo se le subnet mask sono valide
         for (int i = 0; i < 4; i++) {
             netId1[i] = ottetti1[i] & ottettiSM1[i];
             netId2[i] = ottetti2[i] & ottettiSM2[i];
         }
 
+        // Aggiorno il contenuto
         contenuto.removeAll();
 
         if (
                 netId1[0] == netId2[0] &&
-                netId1[1] == netId2[1] &&
-                netId1[2] == netId2[2] &&
-                netId1[3] == netId2[3]
+                        netId1[1] == netId2[1] &&
+                        netId1[2] == netId2[2] &&
+                        netId1[3] == netId2[3]
         ) contenuto.add(new Testo("I due indirizzi appartengono alla stessa sottorete."));
         else contenuto.add(new Testo("I due indirizzi non appartengono alla stessa sottorete."));
 

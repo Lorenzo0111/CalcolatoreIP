@@ -39,15 +39,11 @@ public class PlaceholderInput extends JTextField {
 
         this.placeholder = placeholder;
 
+        // Se il campo è vuoto o contiene il placeholder, allora aggiorna
         if (wasPlaceholder) {
             setText(placeholder);
             setForeground(Color.GRAY);
         }
     }
-
-    public String getPlaceholder() {
-        return placeholder;
-    }
-
 
 }

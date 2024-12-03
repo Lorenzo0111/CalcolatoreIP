@@ -12,18 +12,23 @@ import app.utils.IPUtils;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Schermata per l'opzione A
+ */
 public class OpzioneAScreen extends Pannello {
     private final Pannello contenuto = new Pannello();
 
     public OpzioneAScreen() {
         this.setBackground(Color.BLACK);
 
+        // Titolo e pulsante per tornare indietro
         JPanel titolo = new Pannello();
         titolo.add(new Pulsante("Indietro")
                 .onClick(a -> Applicazione.getInstance().mainScreen()));
         titolo.add(new Testo("Trova classe e visibilità", SwingConstants.CENTER)
                 .setArial(Font.BOLD, 24));
 
+        // Contenuto
         Pannello contenutoPagina = new Pannello();
         contenutoPagina.layout(new BoxLayout(contenutoPagina, BoxLayout.Y_AXIS));
 
@@ -49,16 +54,19 @@ public class OpzioneAScreen extends Pannello {
     }
 
     public void esegui(String ip) {
+        // Controllo se l'indirizzo IP è valido
         int[] ottetti = IPUtils.calcolaOttetti(ip);
         if (ottetti == null)
             throw new CalculatorException("Inserisci un indirizzo IP valido");
 
+        // Calcolo classe e visibilità
         Classe classe = IPUtils.calcolaClasse(ottetti);
         boolean privateIp = IPUtils.privato(ottetti);
 
         if (classe == null)
             throw new CalculatorException("Classe non valida");
 
+        // Aggiorno il contenuto
         String visibilita = privateIp ? "privato" : "pubblico";
 
         contenuto.removeAll();

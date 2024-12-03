@@ -4,6 +4,9 @@ import javax.swing.*;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
 
+/**
+ * Gestore di tabella modificabile
+ */
 public class Tabella {
     private final String[] columns;
     private JScrollPane scrollPane;

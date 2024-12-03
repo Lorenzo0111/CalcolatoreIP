@@ -8,6 +8,9 @@ import app.layout.Testo;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Schermata principale del programma
+ */
 public class MainScreen extends Pannello {
 
     public MainScreen() {
