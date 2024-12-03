@@ -19,6 +19,16 @@ public class OpzioneCScreen extends BaseCalculatorScreen {
 
     @Override
     public void handleSubmit(String ip, int numSottoreti) {
+        List<Sottorete> sottoreti = esegui(ip, numSottoreti);
+
+        impostaRisultato(sottoreti);
+
+        salva.setEnabled();
+        pulisci.setEnabled();
+        convertiBinario.setEnabled();
+    }
+
+    public static List<Sottorete> esegui(String ip, int numSottoreti) {
         // Calcola gli ottetti dell'indirizzo ip
         int[] ottetti = IPUtils.calcolaOttetti(ip);
 
@@ -48,11 +58,7 @@ public class OpzioneCScreen extends BaseCalculatorScreen {
             sottoreti.add(sottorete);
         }
 
-        impostaRisultato(sottoreti);
-
-        salva.setEnabled();
-        pulisci.setEnabled();
-        convertiBinario.setEnabled();
+        return sottoreti;
     }
 
 }

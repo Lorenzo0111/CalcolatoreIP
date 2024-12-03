@@ -63,6 +63,11 @@ public class Applicazione {
 
     // -----------------------------------[ Main ]-----------------------------------
     public static void main(String[] args) {
+        if (args.length > 0 && args[0].equalsIgnoreCase("--no-gui")) {
+            new CLI().init();
+            return;
+        }
+
         SwingUtilities.invokeLater(Applicazione::create);
     }
 

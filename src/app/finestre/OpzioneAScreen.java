@@ -42,7 +42,7 @@ public class OpzioneAScreen extends Pannello {
         inserisciIp.add(ip);
 
         inserisciIp.add(new Pulsante("Conferma")
-                .onClick(a -> esegui(ip.getText())), BorderLayout.PAGE_END);
+                .onClick(a -> onClick(ip.getText())), BorderLayout.PAGE_END);
 
         contenutoPagina.add(inserisciIp);
         contenutoPagina.add(contenuto);
@@ -53,7 +53,16 @@ public class OpzioneAScreen extends Pannello {
         this.add(contenutoPagina, BorderLayout.CENTER);
     }
 
-    public void esegui(String ip) {
+    private void onClick(String ip) {
+        Risultato risultato = esegui(ip);
+
+        contenuto.removeAll();
+        contenuto.add(new Testo("Classe: " + risultato.classe.name()));
+        contenuto.add(new Testo("Visibilità: " + risultato.visibilita));
+        contenuto.revalidate();
+    }
+
+    public static Risultato esegui(String ip) {
         // Controllo se l'indirizzo IP è valido
         int[] ottetti = IPUtils.calcolaOttetti(ip);
         if (ottetti == null)
@@ -66,13 +75,11 @@ public class OpzioneAScreen extends Pannello {
         if (classe == null)
             throw new CalculatorException("Classe non valida");
 
-        // Aggiorno il contenuto
         String visibilita = privateIp ? "privato" : "pubblico";
 
-        contenuto.removeAll();
-        contenuto.add(new Testo("Classe: " + classe.name()));
-        contenuto.add(new Testo("Visibilità: " + visibilita));
-        contenuto.revalidate();
+        return new Risultato(classe, visibilita);
     }
+
+    public record Risultato(Classe classe, String visibilita) {}
 
 }

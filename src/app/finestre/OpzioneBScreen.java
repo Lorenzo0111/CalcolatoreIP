@@ -56,7 +56,7 @@ public class OpzioneBScreen extends Pannello {
         inserisciIp.add(sm2);
 
         inserisciIp.add(new Pulsante("Conferma")
-                .onClick(a -> esegui(ip1.getText(), ip2.getText(), sm1.getText(), sm2.getText())), BorderLayout.PAGE_END);
+                .onClick(a -> onClick(ip1.getText(), ip2.getText(), sm1.getText(), sm2.getText())), BorderLayout.PAGE_END);
 
         contenutoPagina.add(inserisciIp);
         contenutoPagina.add(contenuto);
@@ -67,7 +67,18 @@ public class OpzioneBScreen extends Pannello {
         this.add(contenutoPagina, BorderLayout.CENTER);
     }
 
-    public void esegui(String ip1, String ip2, String sm1, String sm2) {
+    private void onClick(String ip1, String ip2, String sm1, String sm2) {
+        boolean stessoNetId = esegui(ip1, ip2, sm1, sm2);
+
+        contenuto.removeAll();
+
+        if (stessoNetId) contenuto.add(new Testo("I due indirizzi appartengono alla stessa sottorete."));
+        else contenuto.add(new Testo("I due indirizzi non appartengono alla stessa sottorete."));
+
+        contenuto.revalidate();
+    }
+
+    public static boolean esegui(String ip1, String ip2, String sm1, String sm2) {
         // Controllo se gli indirizzi IP e le subnet mask sono validi
         int[] ottetti1 = IPUtils.calcolaOttetti(ip1);
         int[] ottetti2 = IPUtils.calcolaOttetti(ip2);
@@ -95,18 +106,10 @@ public class OpzioneBScreen extends Pannello {
             netId2[i] = ottetti2[i] & ottettiSM2[i];
         }
 
-        // Aggiorno il contenuto
-        contenuto.removeAll();
-
-        if (
-                netId1[0] == netId2[0] &&
-                        netId1[1] == netId2[1] &&
-                        netId1[2] == netId2[2] &&
-                        netId1[3] == netId2[3]
-        ) contenuto.add(new Testo("I due indirizzi appartengono alla stessa sottorete."));
-        else contenuto.add(new Testo("I due indirizzi non appartengono alla stessa sottorete."));
-
-        contenuto.revalidate();
+        return netId1[0] == netId2[0] &&
+                netId1[1] == netId2[1] &&
+                netId1[2] == netId2[2] &&
+                netId1[3] == netId2[3];
     }
 
 }

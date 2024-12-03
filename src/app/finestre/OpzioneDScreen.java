@@ -20,19 +20,7 @@ public class OpzioneDScreen extends BaseCalculatorScreen {
 
     @Override
     public void handleSubmit(String ip, int numSottoreti) {
-        // Calcola gli ottetti dell'indirizzo ip
-        int[] ottetti = IPUtils.calcolaOttetti(ip);
-
-        if (ottetti == null)
-            throw new CalculatorException("L'indirizzo ip inserito non è valido");
-
-        // Calcola la classe dell'indirizzo ip
-        Classe classe = IPUtils.calcolaClasse(ottetti);
-        if (classe == null) throw new CalculatorException("La classe non è valida");
-
-        // Chiede all'utente il numero di host per ogni sottorete
-        if (numSottoreti < 1)
-            throw new CalculatorException("Il numero di sottoreti deve essere maggiore di 0");
+        validate(ip, numSottoreti);
 
         // Chiede all'utente il numero di host per ogni sottorete
         int[] hostPerSottorete = new int[numSottoreti];
@@ -48,6 +36,39 @@ public class OpzioneDScreen extends BaseCalculatorScreen {
                 i--;
             }
         }
+
+        List<Sottorete> sottoreti = esegui(ip, numSottoreti, hostPerSottorete);
+
+        impostaRisultato(sottoreti);
+
+        salva.setEnabled();
+        pulisci.setEnabled();
+        convertiBinario.setEnabled();
+    }
+
+    public static int[] validate(String ip, int numSottoreti) {
+        // Calcola gli ottetti dell'indirizzo ip
+        int[] ottetti = IPUtils.calcolaOttetti(ip);
+
+        if (ottetti == null)
+            throw new CalculatorException("L'indirizzo ip inserito non è valido");
+
+        // Calcola la classe dell'indirizzo ip
+        Classe classe = IPUtils.calcolaClasse(ottetti);
+        if (classe == null) throw new CalculatorException("La classe non è valida");
+
+        if (numSottoreti < 1)
+            throw new CalculatorException("Il numero di sottoreti deve essere maggiore di 0");
+
+        return ottetti;
+    }
+
+    public static List<Sottorete> esegui(String ip, int numSottoreti, int[] hostPerSottorete) {
+        // Calcola gli ottetti dell'indirizzo ip
+        int[] ottetti = validate(ip, numSottoreti);
+
+        Classe classe = IPUtils.calcolaClasse(ottetti);
+        assert classe != null;
 
         // Ordina il numero di host per sottorete in ordine decrescente
         IPUtils.descendingSort(hostPerSottorete);
@@ -76,11 +97,7 @@ public class OpzioneDScreen extends BaseCalculatorScreen {
             sottoreti.add(sottorete);
         }
 
-        impostaRisultato(sottoreti);
-
-        salva.setEnabled();
-        pulisci.setEnabled();
-        convertiBinario.setEnabled();
+        return sottoreti;
     }
 
 }
