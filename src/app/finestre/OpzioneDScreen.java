@@ -62,7 +62,7 @@ public class OpzioneDScreen extends BaseCalculatorScreen {
             else
                 lastNetId = IPUtils.padEnd(IPUtils.incrementBinary(lastNetId), '0', bitsSottoreti[i]);
 
-            Sottorete sottorete = Sottorete.create(ottetti, classe, lastNetId);
+            Sottorete sottorete = Sottorete.create(ottetti, classe, lastNetId, bitsSottoreti[i], hostPerSottorete[i]);
             sottoreti.add(sottorete);
         }
 

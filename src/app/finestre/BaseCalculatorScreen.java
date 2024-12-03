@@ -3,13 +3,10 @@ package app.finestre;
 import app.Applicazione;
 import app.errori.CalculatorException;
 import app.ip.Sottorete;
-import app.layout.Pannello;
-import app.layout.PlaceholderInput;
-import app.layout.Pulsante;
-import app.layout.Testo;
+import app.layout.*;
+import app.utils.IPUtils;
 
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
 import java.io.File;
 import java.io.FileWriter;
@@ -17,14 +14,20 @@ import java.io.IOException;
 import java.util.List;
 
 public abstract class BaseCalculatorScreen extends Pannello {
-    protected final Pulsante salva;
+    private JPanel contenutoPagina;
+    protected Pulsante salva;
     protected Pulsante pulisci;
     protected Pulsante convertiBinario;
-    protected JTable table;
+    protected Tabella table;
     private List<Sottorete> risultato = null;
 
     public BaseCalculatorScreen(String title) {
+        this.redraw(title);
+    }
+
+    public void redraw(String title) {
         this.setBackground(Color.BLACK);
+        this.removeAll();
 
         JPanel titolo = new Pannello();
         titolo.add(new Pulsante("Indietro")
@@ -32,7 +35,7 @@ public abstract class BaseCalculatorScreen extends Pannello {
         titolo.add(new Testo(title, SwingConstants.CENTER)
                 .setArial(Font.BOLD, 24));
 
-        Pannello contenutoPagina = new Pannello();
+        contenutoPagina = new Pannello();
         contenutoPagina.setLayout(new BoxLayout(contenutoPagina, BoxLayout.Y_AXIS));
 
         Pannello inserisciIp = new Pannello();
@@ -97,60 +100,32 @@ public abstract class BaseCalculatorScreen extends Pannello {
 
         azioni.add(pulisci = new Pulsante("Pulisci")
                 .setDisabled()
-                .onClick(e -> {
-                    risultato = null;
-                    salva.setDisabled();
-                    convertiBinario.setDisabled();
-                    pulisci.setDisabled();
-                }), BorderLayout.PAGE_END);
+                .onClick(e -> this.redraw(title)), BorderLayout.PAGE_END);
 
         azioni.add(convertiBinario = new Pulsante("Binario")
                 .setDisabled()
                 .onClick(e -> {
-                    mostraBinario();
-                    convertiBinario.setDisabled();
+                    if (convertiBinario.getText().equalsIgnoreCase("Binario")) {
+                        mostraBinario();
+                        convertiBinario.setText("Decimale");
+                        return;
+                    }
+
+                    convertiBinario.setText("Binario");
+                    impostaRisultato(risultato);
                 }), BorderLayout.PAGE_END);
 
         inserisciIp.add(azioni);
         contenutoPagina.add(inserisciIp);
 
-        table = new JTable(new String[][]{}, new String[]{ "N. Hosts", "Net ID", "Primo Host", "Ultimo Host", "Gateway", "Broadcast", "SM" });
-
-        JScrollPane scroll = new JScrollPane(table);
-        scroll.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
-
-            @Override
-            protected void configureScrollBarColors() {
-                this.thumbColor = Color.DARK_GRAY;
-                this.trackColor = Color.BLACK;
-            }
-
-            @Override
-            protected JButton createDecreaseButton(int orientation) {
-                return createZeroButton();
-            }
-
-            @Override
-            protected JButton createIncreaseButton(int orientation) {
-                return createZeroButton();
-            }
-
-            private JButton createZeroButton() {
-                JButton jbutton = new JButton();
-                jbutton.setPreferredSize(new Dimension(0, 0));
-                jbutton.setMinimumSize(new Dimension(0, 0));
-                jbutton.setMaximumSize(new Dimension(0, 0));
-                return jbutton;
-            }
-
-        });
-
-        contenutoPagina.add(scroll);
+        table = new Tabella(new String[]{"N. Hosts", "Net ID", "Primo Host", "Ultimo Host", "Gateway", "Broadcast", "SM"});
 
         this.setLayout(new BorderLayout());
 
         this.add(titolo, BorderLayout.PAGE_START);
         this.add(contenutoPagina, BorderLayout.CENTER);
+
+        this.revalidate();
     }
 
     public abstract void handleSubmit(String ip, int numSottoreti);
@@ -158,14 +133,56 @@ public abstract class BaseCalculatorScreen extends Pannello {
     public void mostraBinario() {
         if (risultato == null) return;
 
-        // TODO: AGGIORNA TABLE
+        JScrollPane prev = table.get();
+        if (prev != null)
+            contenutoPagina.remove(prev);
+
+        String[][] dati = new String[risultato.size()][7];
+        for (int i = 0; i < risultato.size(); i++) {
+            Sottorete sottorete = risultato.get(i);
+            dati[i] = new String[]{
+                    String.valueOf(sottorete.hosts()),
+                    IPUtils.toBinary(sottorete.netId()),
+                    IPUtils.toBinary(sottorete.firstHost()),
+                    IPUtils.toBinary(sottorete.lastHost()),
+                    IPUtils.toBinary(sottorete.gateway()),
+                    IPUtils.toBinary(sottorete.broadcast()),
+                    IPUtils.toBinary(sottorete.subnetMask()) + " /" + IPUtils.getCidr(sottorete.subnetMask())
+            };
+        }
+
+        table.setData(dati);
+        contenutoPagina.add(table.get());
+        contenutoPagina.revalidate();
+
         salva.setEnabled();
         pulisci.setEnabled();
     }
 
     protected void impostaRisultato(List<Sottorete> risultato) {
         this.risultato = risultato;
-        // TODO: AGGIORNA TABLE
+
+        JScrollPane prev = table.get();
+        if (prev != null)
+            contenutoPagina.remove(prev);
+
+        String[][] dati = new String[risultato.size()][7];
+        for (int i = 0; i < risultato.size(); i++) {
+            Sottorete sottorete = risultato.get(i);
+            dati[i] = new String[]{
+                    String.valueOf(sottorete.hosts()),
+                    IPUtils.toString(sottorete.netId()),
+                    IPUtils.toString(sottorete.firstHost()),
+                    IPUtils.toString(sottorete.lastHost()),
+                    IPUtils.toString(sottorete.gateway()),
+                    IPUtils.toString(sottorete.broadcast()),
+                    IPUtils.toString(sottorete.subnetMask()) + " /" + IPUtils.getCidr(sottorete.subnetMask())
+            };
+        }
+
+        table.setData(dati);
+        contenutoPagina.add(table.get());
+        contenutoPagina.revalidate();
     }
 
 }

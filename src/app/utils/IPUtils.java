@@ -3,6 +3,7 @@ package app.utils;
 import app.errori.CalculatorException;
 import app.ip.Classe;
 
+import java.util.Arrays;
 import java.util.function.Consumer;
 
 public final class IPUtils {
@@ -107,5 +108,21 @@ public final class IPUtils {
     public static String incrementBinary(String binary) {
         int decimal = Integer.parseInt(binary, 2);
         return padStart(Integer.toBinaryString(decimal + 1), '0', binary.length());
+    }
+
+    public static int[] getSubnetMask(Classe classe, int bits) {
+        String subnetMask = IPUtils.calculateSubnetMask(classe, bits);
+        return Arrays.stream(IPUtils.dividiOttetti(subnetMask))
+                .mapToInt(s -> Integer.parseInt(s, 2))
+                .toArray();
+    }
+
+    public static int getCidr(int[] subnetMask) {
+        int cidr = 0;
+        for (int i : subnetMask) {
+            cidr += Integer.bitCount(i);
+        }
+
+        return cidr;
     }
 }

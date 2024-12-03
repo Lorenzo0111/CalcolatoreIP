@@ -36,7 +36,7 @@ public class OpzioneCScreen extends BaseCalculatorScreen {
             String netId = Integer.toBinaryString(i);
             netId = IPUtils.padStart(netId, '0', bitSottoreti);
 
-            Sottorete sottorete = Sottorete.create(ottetti, classe, netId);
+            Sottorete sottorete = Sottorete.create(ottetti, classe, netId, bitSottoreti, 0);
             sottoreti.add(sottorete);
         }
 

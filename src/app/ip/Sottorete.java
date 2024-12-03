@@ -7,9 +7,12 @@ public record Sottorete(
         int[] firstHost,
         int[] lastHost,
         int[] gateway,
-        int[] broadcast
+        int[] broadcast,
+        int[] subnetMask,
+        int hosts
 ) {
-    public static Sottorete create(int[] ip, Classe classe, String netIdBin) {
+
+    public static Sottorete create(int[] ip, Classe classe, String netIdBin, int bits, int hosts) {
         String netId = IPUtils.padEnd(netIdBin, '0', classe.getBitHost());
         String firstHost = IPUtils.padEnd(netIdBin, '0', classe.getBitHost() - 1) + "1";
         String lastHost = IPUtils.manipulate(IPUtils.padEnd(netIdBin, '1', classe.getBitHost()), builder ->
@@ -22,7 +25,9 @@ public record Sottorete(
                 prepare(ip, classe, firstHost),
                 prepare(ip, classe, lastHost),
                 prepare(ip, classe, gateway),
-                prepare(ip, classe, broadcast)
+                prepare(ip, classe, broadcast),
+                IPUtils.getSubnetMask(classe, bits),
+                hosts
         );
     }
 
@@ -47,12 +52,14 @@ public record Sottorete(
                 Ultimo Host: %d.%d.%d.%d
                 Gateway: %d.%d.%d.%d
                 Broadcast: %d.%d.%d.%d
+                Subnet Mask: %d.%d.%d.%d
                 """.formatted(
                 netId[0], netId[1], netId[2], netId[3],
                 firstHost[0], firstHost[1], firstHost[2], firstHost[3],
                 lastHost[0], lastHost[1], lastHost[2], lastHost[3],
                 gateway[0], gateway[1], gateway[2], gateway[3],
-                broadcast[0], broadcast[1], broadcast[2], broadcast[3]
+                broadcast[0], broadcast[1], broadcast[2], broadcast[3],
+                subnetMask[0], subnetMask[1], subnetMask[2], subnetMask[3]
         );
     }
 
@@ -63,12 +70,14 @@ public record Sottorete(
                 Ultimo Host: %s
                 Gateway: %s
                 Broadcast: %s
+                Subnet Mask: %s
                 """.formatted(
                 IPUtils.toBinary(netId),
                 IPUtils.toBinary(firstHost),
                 IPUtils.toBinary(lastHost),
                 IPUtils.toBinary(gateway),
-                IPUtils.toBinary(broadcast)
+                IPUtils.toBinary(broadcast),
+                IPUtils.toBinary(subnetMask)
         );
     }
 }
