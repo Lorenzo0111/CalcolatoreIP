@@ -37,8 +37,6 @@ public class OpzioneDScreen extends BaseCalculatorScreen {
 
             try {
                 hostPerSottorete[i] = Integer.parseInt(response);
-
-                // TODO: Check if the number of hosts is valid
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(null, "Inserisci un numero valido");
                 i--;
@@ -51,6 +49,9 @@ public class OpzioneDScreen extends BaseCalculatorScreen {
 
         for (int i = 0; i < numSottoreti; i++) {
             bitsSottoreti[i] = classe.getBitHost() - (int) Math.ceil(IPUtils.log2(hostPerSottorete[i] + 3));
+
+            if (bitsSottoreti[i] <= 0)
+                throw new CalculatorException("I bit per la sottorete #" + (i+1) + " non sono sufficienti");
         }
 
         List<Sottorete> sottoreti = new ArrayList<>();
@@ -66,7 +67,7 @@ public class OpzioneDScreen extends BaseCalculatorScreen {
             sottoreti.add(sottorete);
         }
 
-        risultato = sottoreti;
+        impostaRisultato(sottoreti);
 
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < sottoreti.size(); i++) {

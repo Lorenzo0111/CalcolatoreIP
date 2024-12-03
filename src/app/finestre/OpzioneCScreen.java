@@ -41,7 +41,7 @@ public class OpzioneCScreen extends BaseCalculatorScreen {
             sottoreti.add(sottorete);
         }
 
-        risultato = sottoreti;
+        impostaRisultato(sottoreti);
 
         StringBuilder builder = new StringBuilder();
         String subnetMask = IPUtils.calculateSubnetMask(classe, bitSottoreti);

@@ -21,7 +21,7 @@ public abstract class BaseCalculatorScreen extends Pannello {
     protected final Pulsante salva;
     protected Pulsante pulisci;
     protected Pulsante convertiBinario;
-    protected List<Sottorete> risultato = null;
+    private List<Sottorete> risultato = null;
 
     public BaseCalculatorScreen(String title) {
         this.setBackground(Color.BLACK);
@@ -174,6 +174,10 @@ public abstract class BaseCalculatorScreen extends Pannello {
         contenuto.setCaretPosition(0);
         salva.setEnabled();
         pulisci.setEnabled();
+    }
+
+    protected void impostaRisultato(List<Sottorete> risultato) {
+        this.risultato = risultato;
     }
 
 }
