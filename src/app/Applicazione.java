@@ -4,6 +4,7 @@ import app.errori.CalculatorException;
 import app.finestre.*;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * Classe principale dell'applicazione
@@ -63,7 +64,7 @@ public class Applicazione {
 
     // -----------------------------------[ Main ]-----------------------------------
     public static void main(String[] args) {
-        if (args.length > 0 && args[0].equalsIgnoreCase("--no-gui")) {
+        if (!Desktop.isDesktopSupported() || (args.length > 0 && args[0].equalsIgnoreCase("--no-gui"))) {
             new CLI().init();
             return;
         }
