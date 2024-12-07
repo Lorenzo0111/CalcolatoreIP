@@ -194,7 +194,7 @@ public abstract class BaseCalculatorScreen extends Pannello {
         for (int i = 0; i < risultato.size(); i++) {
             Sottorete sottorete = risultato.get(i);
             dati[i] = new String[]{
-                    String.valueOf(sottorete.hosts()),
+                    String.valueOf(sottorete.getHosts()),
                     IPUtils.toBinary(sottorete.netId()),
                     IPUtils.toBinary(sottorete.firstHost()),
                     IPUtils.toBinary(sottorete.lastHost()),
@@ -230,7 +230,7 @@ public abstract class BaseCalculatorScreen extends Pannello {
         for (int i = 0; i < risultato.size(); i++) {
             Sottorete sottorete = risultato.get(i);
             dati[i] = new String[]{
-                    String.valueOf(sottorete.hosts()),
+                    String.valueOf(sottorete.getHosts()),
                     IPUtils.toString(sottorete.netId()),
                     IPUtils.toString(sottorete.firstHost()),
                     IPUtils.toString(sottorete.lastHost()),

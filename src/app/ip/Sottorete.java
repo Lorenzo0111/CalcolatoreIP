@@ -60,6 +60,13 @@ public record Sottorete(
         return result;
     }
 
+    public int getHosts() {
+        if (hosts > -1) return hosts;
+
+        int hostBits = 32 - IPUtils.getCidr(subnetMask);
+        return (int) Math.pow(2, hostBits) - 3;
+    }
+
     @Override
     public String toString() {
         return """
