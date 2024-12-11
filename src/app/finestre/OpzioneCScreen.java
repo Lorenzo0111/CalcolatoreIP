@@ -44,7 +44,7 @@ public class OpzioneCScreen extends BaseCalculatorScreen {
         int bitHostSottoreti = classe.getBitHost() - bitSottoreti;
 
         if (bitHostSottoreti < 2)
-            throw new CalculatorException("Il numero di reti inserite non è valido");
+            throw new CalculatorException("Il numero di reti inserite non è valido. Il massimo è " + (int) Math.pow(2, classe.getBitHost() - 2));
 
         // Calcola le sottoreti
         List<Sottorete> sottoreti = new ArrayList<>();

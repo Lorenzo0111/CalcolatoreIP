@@ -102,7 +102,7 @@ public class CLI {
 
                         int[] hostPerSottorete = new int[numSottoretiD];
                         for (int i = 0; i < numSottoretiD; i++) {
-                            System.out.print("Inserisci il numero di host per la sottorete " + (i + 1));
+                            System.out.print("Inserisci il numero di host per la sottorete " + (i + 1) + ": ");
                             hostPerSottorete[i] = scanner.nextInt();
                         }
 

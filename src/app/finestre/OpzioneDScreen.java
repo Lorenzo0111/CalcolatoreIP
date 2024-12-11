@@ -22,6 +22,12 @@ public class OpzioneDScreen extends BaseCalculatorScreen {
     public void handleSubmit(String ip, int numSottoreti) {
         validate(ip, numSottoreti);
 
+        int[] ottetti = IPUtils.calcolaOttetti(ip);
+        assert ottetti != null;
+
+        Classe classe = IPUtils.calcolaClasse(ottetti);
+        assert classe != null;
+
         // Chiede all'utente il numero di host per ogni sottorete
         int[] hostPerSottorete = new int[numSottoreti];
 
@@ -31,8 +37,19 @@ public class OpzioneDScreen extends BaseCalculatorScreen {
 
             try {
                 hostPerSottorete[i] = Integer.parseInt(response);
+
+                if (hostPerSottorete[i] < 1)
+                    throw new NumberFormatException();
+
+                int bits = classe.getBitHost() - (int) Math.ceil(IPUtils.log2(hostPerSottorete[i] + 3));
+
+                if (bits <= 0)
+                    throw new CalculatorException("I bit per la sottorete non sono sufficienti");
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(null, "Inserisci un numero valido");
+                i--;
+            } catch (CalculatorException e) {
+                JOptionPane.showMessageDialog(null, e.getMessage());
                 i--;
             }
         }
@@ -59,6 +76,10 @@ public class OpzioneDScreen extends BaseCalculatorScreen {
 
         if (numSottoreti < 1)
             throw new CalculatorException("Il numero di sottoreti deve essere maggiore di 0");
+
+        int maxSottoreti = (int) Math.pow(2, classe.getBitHost() - 2);
+        if (numSottoreti > maxSottoreti)
+            throw new CalculatorException("Il numero di sottoreti non può essere maggiore di " + maxSottoreti);
 
         return ottetti;
     }
@@ -90,8 +111,19 @@ public class OpzioneDScreen extends BaseCalculatorScreen {
         for (int i = 0; i < numSottoreti; i++) {
             if (lastNetId == null)
                 lastNetId = IPUtils.padEnd("0", '0', bitsSottoreti[i]);
-            else
-                lastNetId = IPUtils.padEnd(IPUtils.incrementBinary(lastNetId), '0', bitsSottoreti[i]);
+            else {
+                // Controlla se i bit sono sufficienti per rappresentare il numero di host
+                int lastLength = lastNetId.length();
+                String incremented = IPUtils.incrementBinary(lastNetId);
+
+                if (incremented.length() > lastLength)
+                    throw new CalculatorException("Non sono rimasti bit disponibili per effettuare il calcolo. Riduci il numero di host e riprova.");
+
+                lastNetId = IPUtils.padEnd(incremented, '0', bitsSottoreti[i]);
+            }
+
+            if (lastNetId.length() > bitsSottoreti[i])
+                throw new CalculatorException("Il numero di host " + hostPerSottorete[i] + " per la sottorete #" + (i + 1) + " è troppo grande");
 
             Sottorete sottorete = Sottorete.create(ottetti, classe, lastNetId, bitsSottoreti[i], hostPerSottorete[i]);
             sottoreti.add(sottorete);
